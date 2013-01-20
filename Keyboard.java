@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Keyboard {
+	
+	/*Incomplete Class*/
 
 	private final int WHITE_KEY_WIDTH = 24;
 	private final int WHITE_KEY_LENGTH = 70;
@@ -78,7 +80,6 @@ public class Keyboard {
 				break;
 			}
 		}
-		//if (b){
 			for (Integer i : _keyboard.keySet()){
 				if (b && _keyboard.get(i).contains(x,z)){
 					System.out.println("Found key!");
@@ -92,9 +93,7 @@ public class Keyboard {
 						rob.keyRelease(i);
 						_keysPressed.put(i, false);
 					}	
-				}
-			//}
-			
+				}	
 		}
 	}
 

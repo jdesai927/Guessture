@@ -24,8 +24,9 @@ class SampleListener extends Listener {
 	public int leftheld;
 	public Piano _piano;
 	public Keyboard _keyboard;
-	public Nothing _nothing;
+	public Grab _grab;
 	public ArrayList<Gesture> _gestures;
+	public ArrayList<Gesture> _haloGestures;
 	
     public void onInit(Controller controller) {
         System.out.println("Initialized");
@@ -37,23 +38,24 @@ class SampleListener extends Listener {
 		leftclick = false;
 		rightclick = false;
 		_gestures = new ArrayList<Gesture>();
+		_haloGestures = new ArrayList<Gesture>();
 		_gestureOngoing = false;
-		_nothing = new Nothing();
 		_keyboard = new Keyboard();
+		_grab = new Grab();
 		leftheld = 0;
 		mode = 0;
-		_gestures.add(new SwipeTest(2, 20, Dir.LEFT));
-		_gestures.add(new SwipeTest(2, 20, Dir.RIGHT));
-		_gestures.add(new SwipeTest(2, 15, Dir.UP));
-		_gestures.add(new SwipeTest(2, 15, Dir.DOWN));
-		_gestures.add(new SwipeTest(4, 15, Dir.DOWN));
+		_gestures.add(new Swipe(2, 20, Dir.LEFT));
+		_gestures.add(new Swipe(2, 20, Dir.RIGHT));
+		_gestures.add(new Swipe(2, 15, Dir.UP));
+		_gestures.add(new Swipe(2, 15, Dir.DOWN));
+		_gestures.add(new Swipe(3, 30, Dir.DOWN));
 		//_gestures.add(new Grab(0, 15));
 		_piano = new Piano();
 		
 		
 		
 		
-		//_gestures.add(new SwipeTest(2, 30, Dir.UP));
+		//_gestures.add(new Swipe(2, 30, Dir.UP));
 		//_gestures.add(new Swipe(2, 20));
 		//_gestures.add(new Swipe(3, 20));
 		//_gestures.add(new Pinch(2, 2));
@@ -106,15 +108,7 @@ class SampleListener extends Listener {
         		totalf++;
         	}
         }
-        if (totalf == 2) {
-        	/*
-        	if (!leftclick && !rightclick) {
-        		System.out.println("right click");
-        		rob.mousePress(MouseEvent.BUTTON3_MASK);
-        		rightclick = true;
-        	}
-        	*/
-        } else if (totalf == 1) {
+        if (totalf == 1) {
         	if (!leftclick && !rightclick) {
         		System.out.println("left click");
         		rob.mousePress(MouseEvent.BUTTON1_MASK);
@@ -137,7 +131,7 @@ class SampleListener extends Listener {
     
     public void onFrame(Controller controller) {
         // Get the most recent frame and report some basic informations
-    	Frame frame = controller.frame();
+	Frame frame = controller.frame();		
         Screen screen = controller.calibratedScreens().get(0);
         searchGestures(frame);
         if (mode == 1) {
@@ -145,10 +139,20 @@ class SampleListener extends Listener {
         }
         if (mode == 0) {
         	mouseClick(frame);
-        	if (!(leftclick && leftheld < 30)) {
+        	if (!(leftclick && leftheld < 25)) {
         		moveMouse(frame, screen);
         	}   
         }
+        if (mode == 2) {
+        	_grab.doGrab(rob, frame);
+        }
+        if (mode == 3) {
+        	mouseClick(frame);
+        	if (!(leftclick && leftheld < 25)) {
+        		moveMouse(frame, screen);
+        	}
+        }
+        	
     }
 }
 

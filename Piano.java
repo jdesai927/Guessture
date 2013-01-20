@@ -1,7 +1,7 @@
 import java.awt.Rectangle;
 import java.awt.Robot;
 
-	import com.leapmotion.leap.Finger;
+import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Frame;
 import java.util.*;
 import java.awt.*;
@@ -14,6 +14,7 @@ public class Piano {
 		private final int WHITE_KEY_LENGTH = 150;
 		private final int BLACK_KEY_LENGTH = 50;
 		private final int BLACK_KEY_WIDTH = 20;
+		/*z coordinate start of the keyboard*/
 		private final int KEY_START = -50;
 
 		protected HashMap<Integer, Rectangle> _keyboard;
@@ -23,7 +24,6 @@ public class Piano {
 		protected float z;
 		protected int velocity;
 		protected Receiver device;
-		private ShortMessage myMsg;
 		
 		
 		public Rectangle makeKey(boolean white, int startX, int startZ) {
@@ -44,9 +44,10 @@ public class Piano {
 			
 			_keysPressed = new HashMap<Integer, Boolean>();
 			_keyboard = new HashMap<Integer, Rectangle>();
+			
 			/*Keys*/
 
-			/*
+			/*Black Keys
 			_keyboard.put(new Integer(61), makeKey (false, (int) ((-4 * WHITE_KEY_WIDTH) + (2 * WHITE_KEY_WIDTH/3)), (KEY_START - BLACK_KEY_LENGTH)));
 			_keysPressed.put(new Integer(61), false);
 			_keyboard.put(new Integer(63), makeKey (false, (int) ((-4 * WHITE_KEY_WIDTH) + (3 * WHITE_KEY_WIDTH/3) + 1 * BLACK_KEY_WIDTH), (KEY_START - BLACK_KEY_LENGTH)));
@@ -58,6 +59,8 @@ public class Piano {
 			_keyboard.put(new Integer(70), makeKey (false, (int) ((-4 * WHITE_KEY_WIDTH) + (9 * WHITE_KEY_WIDTH/3) + 4 * BLACK_KEY_WIDTH), (KEY_START - BLACK_KEY_LENGTH)));
 			_keysPressed.put(new Integer(70), false);
 			*/
+			
+			/*White Keys*/
 			_keyboard.put(new Integer(60), makeKey (true, (int) ((-4 * WHITE_KEY_WIDTH) + (0 * WHITE_KEY_WIDTH)), KEY_START));
 			_keysPressed.put(new Integer(60), false);
 			_keyboard.put(new Integer(62), makeKey (true, (int) ((-4 * WHITE_KEY_WIDTH) + (1 * WHITE_KEY_WIDTH)), KEY_START));
@@ -82,18 +85,16 @@ public class Piano {
 			
 			boolean b = false;
 			for (Finger f : frame.fingers()) {
-				if (f.tipPosition().getY() < 120) {// && Helpers.closeTo(f.tipVelocity(), Dir.DOWN, 20)){
+				if (f.tipPosition().getY() < 120) {
 					b = true;
 					x = f.tipPosition().getX();
 					z = f.tipPosition().getZ();
 					velocity = (int) f.tipVelocity().magnitude();
 				}
 				if (b) {
-					//System.out.println("below Y!");
 					break;
 				}
 			}
-			//if (b){
 				for (Integer i : _keyboard.keySet()){
 					if (b && _keyboard.get(i).contains(x,z)){
 						if (!_keysPressed.get(i)) {
@@ -115,11 +116,9 @@ public class Piano {
 						break;
 					} else {
 						if (_keysPressed.get(i)) {
-							//rob.keyRelease(i);
 							_keysPressed.put(i, false);
 						}	
 					}
-				//}
 				
 			}
 		}

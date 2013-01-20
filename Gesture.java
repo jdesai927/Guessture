@@ -31,12 +31,10 @@ public abstract class Gesture {
 		if (detectedInFrame(frame)) {
 			_currentFrames++;
 		} else {
-			//System.out.println("detect failed at " + _currentFrames);
 			_currentFrames = 0;
 		}
 		boolean b = false;
 		if (_currentFrames >= _numFrames) {
-			//System.out.println("detected!");
 			b = true;
 			if (_ends) {
 				_currentFrames = 0;
